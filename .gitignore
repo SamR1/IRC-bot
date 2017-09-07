@@ -5,4 +5,5 @@ __pycache__/
 .scannerwork/
 test*.*
 /config.yml
+sonar-project.properties
 
