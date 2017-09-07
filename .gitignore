@@ -1,0 +1,8 @@
+# Created by .ignore support plugin (hsz.mobi)
+__pycache__/
+.idea/
+*.log
+.scannerwork/
+test*.*
+/config.yml
+
