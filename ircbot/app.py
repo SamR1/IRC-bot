@@ -40,6 +40,29 @@ def main():
                       param['main_bot']['bot_name'],
                       param['main_bot']['exitcode'])
 
+    while 1:
+        irc_msg = irc_socket.irc_socket.recv(2048).decode("UTF-8")
 
+        # Message format: “:[Nick]!~[hostname]@[IP Address] PRIVMSG [CHANNEL] :[message]”
+        irc_msg = irc_msg.strip('\n\r')
+        logging.debug(irc_msg)
+
+        # check if the message is a private message
+        if irc_msg.find("PRIVMSG") != -1:
+            name = irc_msg.split('!', 1)[0][1:]
+            message = irc_msg.split('PRIVMSG', 1)[1].split(':', 1)[1]
+
+            # Usernames (at least for Freenode) are limited to 16 characters.
+            if len(name) < 17:
+
+                if name.lower() == main_bot.admin_name and message.rstrip() == main_bot.exitcode:
+                    main_bot.send_message("oh...okay. :'(")
+                    irc_socket.irc_socket.send(bytes("QUIT \n", "UTF-8"))
+                    return
+                else:
+                    main_bot.privmsg_actions(message, name)
+
+        elif irc_msg.find("PING :") != -1:
+            irc_msg.ping()
 
 main()

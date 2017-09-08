@@ -5,40 +5,48 @@ import logging
 class IRCBot:
     """ IRC Bot """
 
-    def __init__(self, irc_socket, channel, admin_name, name, exitcode):
-        self.irc_socket = irc_socket
-        self.channel = channel
-        self.admin_name = admin_name
-        self.name = name
-        self.exitcode = exitcode
-        self.irc_socket.send(
-            bytes("USER " + self.name + " " + self.name + " " + self.name + " " + self.name + "\n",
+    def __init__(self, irc_socket, channel, admin_name, botname, exitcode):
+        self._irc_socket = irc_socket
+        self._channel = channel
+        self._admin_name = admin_name
+        self._name = botname
+        self._exitcode = exitcode + botname
+        self._irc_socket.send(
+            bytes("USER " + self._name + " " + self._name + " " + self._name + " " + self._name + "\n",
                   "UTF-8"))
-        self.irc_socket.send(bytes("NICK " + self.name + "\n", "UTF-8"))
+        self._irc_socket.send(bytes("NICK " + self._name + "\n", "UTF-8"))
         self.join_channel()
 
+    def _get_admin_name(self):
+        """ Function to get admin name"""
+        return self._admin_name
+
+    def _get_exitcode(self):
+        """ Function to get exitcode"""
+        return self._exitcode
+
     def join_channel(self):
-        self.irc_socket.sendall(bytes("JOIN " + self.channel + "\n", "UTF-8"))
+        self._irc_socket.sendall(bytes("JOIN " + self._channel + "\n", "UTF-8"))
         irc_msg = ""
         while irc_msg.find("End of /NAMES list.") == -1:
-            irc_msg = self.irc_socket.recv(2048).decode("UTF-8")
+            irc_msg = self._irc_socket.recv(2048).decode("UTF-8")
             irc_msg = irc_msg.strip('\n\r')
             logging.info(irc_msg)
 
     def ping(self):
         """ respond to server pings."""
-        self.irc_socket.send(bytes("PONG :pingis\n", "UTF-8"))
+        self._irc_socket.send(bytes("PONG :pingis\n", "UTF-8"))
 
     def send_message(self, msg):
         """ sends messages to the target. """
-        self.irc_socket.send(bytes("PRIVMSG " + self.channel + " :" + msg + "\n", "UTF-8"))
+        self._irc_socket.send(bytes("PRIVMSG " + self._channel + " :" + msg + "\n", "UTF-8"))
 
     def privmsg_actions(self, message, name):
         """ PRIVMSG actions """
 
         # greetings
-        if message.find('Hi ' + self.channel) != -1:
-            self.channel.sendmsg("Hello " + name + "!")
+        if message.find('Hi ' + self._channel) != -1:
+            self._channel.sendmsg("Hello " + name + "!")
 
         # searching for a command ('.tell')
         if message[:5].find('.tell') != -1:
@@ -55,3 +63,6 @@ class IRCBot:
                           "‘.tell [target] [message]’ to work properly."
 
             self.send_message(message)
+
+    admin_name = property(_get_admin_name)
+    exitcode = property(_get_exitcode)
