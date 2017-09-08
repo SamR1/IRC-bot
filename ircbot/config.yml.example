@@ -4,3 +4,4 @@ main_bot:
     bot_name:
     admin_name:
     exitcode:
+    exitmsg:

@@ -2,8 +2,9 @@
 """ Main app """
 import logging
 import yaml
-from ircbot import IRCBot
-from ircsocket import IRCSocket
+from classes.ircbot import IRCBot
+from classes.ircsocket import IRCSocket
+
 
 def loading_param():
     with open('config.yml', 'r') as stream:
@@ -23,22 +24,23 @@ def loading_param():
 def main():
     """ Main function """
 
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(filename='ircbot.log', level=logging.DEBUG)
     logging.debug("Entering main()")
 
     logging.debug("Loading parameters")
     param = loading_param()
 
-    logging.info("Connection to socket")
+    logging.info("Connection to the socket")
     irc_socket = IRCSocket(param['main_bot']['irc_server'], param['main_bot']['irc_port'])
     irc_socket.connect()
 
-    logging.debug("initializing the main Bot")
+    logging.debug("Main Bot init")
     main_bot = IRCBot(irc_socket.irc_socket,
                       param['main_bot']['channel'],
                       param['main_bot']['admin_name'],
                       param['main_bot']['bot_name'],
-                      param['main_bot']['exitcode'])
+                      param['main_bot']['exitcode'],
+                      param['main_bot']['exitmsg'])
 
     while 1:
         irc_msg = irc_socket.irc_socket.recv(2048).decode("UTF-8")
@@ -55,10 +57,11 @@ def main():
 
             # Usernames (at least for Freenode) are limited to 16 characters.
             if len(name) < 17:
-                logging.debug("Usernames")
+                logging.debug("Name from valid usernames")
 
-                if name.lower() == main_bot.admin_name and message.rstrip() == main_bot.exitcode:
-                    main_bot.send_message("oh...okay. :'(")
+                if name.lower() == main_bot.admin_name.lower() and message.rstrip() == \
+                        main_bot.exitcode:
+                    main_bot.send_message(main_bot.exitmsg)
                     irc_socket.irc_socket.send(bytes("QUIT \n", "UTF-8"))
                     return
                 else:

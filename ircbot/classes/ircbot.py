@@ -5,12 +5,13 @@ import logging
 class IRCBot:
     """ IRC Bot """
 
-    def __init__(self, irc_socket, channel, admin_name, botname, exitcode):
+    def __init__(self, irc_socket, channel, admin_name, botname, exitcode, exitmsg):
         self._irc_socket = irc_socket
         self._channel = channel
         self._admin_name = admin_name
         self._name = botname
         self._exitcode = exitcode + botname
+        self._exitmsg = exitmsg
         self._irc_socket.send(
             bytes("USER " + self._name + " " + self._name + " " + self._name + " " + self._name + "\n",
                   "UTF-8"))
@@ -24,6 +25,10 @@ class IRCBot:
     def _get_exitcode(self):
         """ Function to get exitcode"""
         return self._exitcode
+
+    def _get_exitmsg(self):
+        """ Function to get exitmsg"""
+        return self._exitmsg
 
     def join_channel(self):
         self._irc_socket.sendall(bytes("JOIN " + self._channel + "\n", "UTF-8"))
@@ -47,8 +52,6 @@ class IRCBot:
     def privmsg_actions(self, message, name):
         """ PRIVMSG actions """
 
-        print(message, name)
-
         # greetings
         if message.find('Hi ' + self._name) != -1:
             self.send_message("Hello " + name + "!")
@@ -71,3 +74,4 @@ class IRCBot:
 
     admin_name = property(_get_admin_name)
     exitcode = property(_get_exitcode)
+    exitmsg = property(_get_exitmsg)
