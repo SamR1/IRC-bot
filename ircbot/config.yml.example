@@ -1,5 +1,6 @@
-irc_server:
-channel:
-bot_name:
-admin_name:
-exitcode:
+main_bot:
+    irc_server:
+    channel:
+    bot_name:
+    admin_name:
+    exitcode:

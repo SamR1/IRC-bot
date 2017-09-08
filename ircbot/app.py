@@ -49,11 +49,13 @@ def main():
 
         # check if the message is a private message
         if irc_msg.find("PRIVMSG") != -1:
+            logging.debug("PRIVMSG")
             name = irc_msg.split('!', 1)[0][1:]
             message = irc_msg.split('PRIVMSG', 1)[1].split(':', 1)[1]
 
             # Usernames (at least for Freenode) are limited to 16 characters.
             if len(name) < 17:
+                logging.debug("Usernames")
 
                 if name.lower() == main_bot.admin_name and message.rstrip() == main_bot.exitcode:
                     main_bot.send_message("oh...okay. :'(")
@@ -63,6 +65,6 @@ def main():
                     main_bot.privmsg_actions(message, name)
 
         elif irc_msg.find("PING :") != -1:
-            irc_msg.ping()
+            main_bot.ping()
 
 main()

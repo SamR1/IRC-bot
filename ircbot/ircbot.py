@@ -37,16 +37,21 @@ class IRCBot:
         """ respond to server pings."""
         self._irc_socket.send(bytes("PONG :pingis\n", "UTF-8"))
 
-    def send_message(self, msg):
+    def send_message(self, msg, target=None):
         """ sends messages to the target. """
-        self._irc_socket.send(bytes("PRIVMSG " + self._channel + " :" + msg + "\n", "UTF-8"))
+        logging.debug("sending message: " + msg)
+        if target is None:
+            target = self._channel
+        self._irc_socket.send(bytes("PRIVMSG " + target + " :" + msg + "\n", "UTF-8"))
 
     def privmsg_actions(self, message, name):
         """ PRIVMSG actions """
 
+        print(message, name)
+
         # greetings
-        if message.find('Hi ' + self._channel) != -1:
-            self._channel.sendmsg("Hello " + name + "!")
+        if message.find('Hi ' + self._name) != -1:
+            self.send_message("Hello " + name + "!")
 
         # searching for a command ('.tell')
         if message[:5].find('.tell') != -1:
@@ -62,7 +67,7 @@ class IRCBot:
                 message = "Could not parse. The message should be in the format of " \
                           "‘.tell [target] [message]’ to work properly."
 
-            self.send_message(message)
+            self.send_message(message, target)
 
     admin_name = property(_get_admin_name)
     exitcode = property(_get_exitcode)
