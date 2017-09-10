@@ -81,9 +81,9 @@ class IRCBot:
     def get_info(self, message):
         """ getting weather info for now """
 
-        pos = message.find("give me the weather at ")
+        pos = message.find("give me the weather for ")
         if pos != -1:
-            pos += 23
+            pos += 24
             city = message[pos:]
             city = city.split(' ')[0] if city != '' else ''
             if city != '':

@@ -1,5 +1,6 @@
 main_bot:
   irc_server:
+  irc_port:
   channel:
   bot_name:
   admin_name:
