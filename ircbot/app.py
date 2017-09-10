@@ -36,12 +36,7 @@ def main():
 
     logging.debug("Main Bot init")
     main_bot = IRCBot(irc_socket.irc_socket,
-                      param['main_bot']['channel'],
-                      param['main_bot']['admin_name'],
-                      param['main_bot']['bot_name'],
-                      param['main_bot']['exitcode'],
-                      param['main_bot']['exitmsg'],
-                      param['main_bot']['entermsg'])
+                      param)
     main_bot.join_channel()
 
     while 1:

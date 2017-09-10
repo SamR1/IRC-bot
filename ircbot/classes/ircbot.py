@@ -5,14 +5,14 @@ import logging
 class IRCBot:
     """ IRC Bot """
 
-    def __init__(self, irc_socket, channel, admin_name, botname, exitcode, exitmsg, entermsg):
+    def __init__(self, irc_socket, param):
         self._irc_socket = irc_socket
-        self._channel = channel
-        self._admin_name = admin_name
-        self._name = botname
-        self._exitcode = exitcode + botname
-        self._exitmsg = exitmsg
-        self._entermsg = entermsg
+        self._channel = param['main_bot']['channel']
+        self._admin_name = param['main_bot']['admin_name']
+        self._name = param['main_bot']['bot_name']
+        self._exitcode = param['main_bot']['exitcode'] + self._name
+        self._exitmsg = param['main_bot']['exitmsg']
+        self._entermsg = param['main_bot']['entermsg']
 
     def _get_admin_name(self):
         """ Function to get admin name"""

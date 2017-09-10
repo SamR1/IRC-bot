@@ -16,13 +16,7 @@ ENTERMSG = param['main_bot']['entermsg']
 
 irc_socket = IRCSocket(IRC_SERVER, IRC_PORT)
 irc_socket.connect()
-main_bot = IRCBot(irc_socket.irc_socket,
-                  IRC_CHANNEL,
-                  IRC_ADMIN,
-                  BOT_NAME,
-                  EXITCODE,
-                  EXITMSG,
-                  ENTERMSG)
+main_bot = IRCBot(irc_socket.irc_socket, param)
 
 
 def test_bot_join_channel(caplog):
