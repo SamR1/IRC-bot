@@ -37,7 +37,8 @@ def main():
     logging.debug("Main Bot init")
     main_bot = IRCBot(irc_socket.irc_socket,
                       param)
-    main_bot.join_channel()
+    if not main_bot.join_channel():
+        return
 
     while 1:
         irc_msg = irc_socket.irc_socket.recv(2048).decode("UTF-8")

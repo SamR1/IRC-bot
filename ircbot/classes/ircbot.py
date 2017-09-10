@@ -29,18 +29,37 @@ class IRCBot:
         return self._exitmsg
 
     def join_channel(self):
+        """ Joining Channel and eventually changing nickname if already used """
+
         logging.debug("joining channel: " + self._channel)
+
         self._irc_socket.send(
             bytes("USER " + self._name + " " + self._name + " " + self._name + " " + self._name +
                   "\n", "UTF-8"))
         self._irc_socket.send(bytes("NICK " + self._name + "\n", "UTF-8"))
         self._irc_socket.sendall(bytes("JOIN " + self._channel + "\n", "UTF-8"))
+
         irc_msg = ""
+        nick_attempts = 0
         while irc_msg.find("End of /NAMES list.") == -1:
             irc_msg = self._irc_socket.recv(2048).decode("UTF-8")
             irc_msg = irc_msg.strip('\n\r')
             logging.info(irc_msg)
+
+            if nick_attempts > 2:
+                logging.info("All nickname changes failed. Quiting...")
+                return False
+            elif irc_msg.find("Nickname is already in use") != -1:
+                self._name += "_"
+                self._exitcode += "_"
+                nick_attempts += 1
+                logging.info("Changing nickname, attempt n°{}: {}".format(nick_attempts,
+                             self._name))
+                self._irc_socket.send(bytes("NICK " + self._name + "\n", "UTF-8"))
+                self._irc_socket.sendall(bytes("JOIN " + self._channel + "\n", "UTF-8"))
+
         self.send_message(self._entermsg)
+        return True
 
     def quit_channel(self):
         self.send_message(self._exitmsg)
