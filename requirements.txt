@@ -1,3 +1,7 @@
+appdirs
+packaging
+six
+cx_Freeze
 PyYAML==3.12
 pytest==3.2.1
 pytest-catchlog==1.2.2

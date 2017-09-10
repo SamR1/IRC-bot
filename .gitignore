@@ -2,6 +2,7 @@
 
 ## Python
 __pycache__/
+build/
 
 ## IDE
 .idea/

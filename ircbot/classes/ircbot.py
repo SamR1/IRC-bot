@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 import logging
 import random
-import re
 from pyowm import OWM
 
 
@@ -119,7 +118,8 @@ class IRCBot:
                     weather = "{} ({}): the current status is '{}' and the temperature is {}°C".format(
                         location, country, status, temp)
                     self.send_message(weather)
-        except:
+        except Exception as e:
+            logging.error(str(e.args))
             self.send_message("Sorry, something wrong happened, I can't get the weather data.")
 
     def privmsg_actions(self, message, name):
