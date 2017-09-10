@@ -19,7 +19,7 @@ irc_socket.connect()
 main_bot = IRCBot(irc_socket.irc_socket, param)
 
 
-def test_bot_join_channel(caplog):
+def test_join_channel(caplog):
     """ testing bot init and joining channel (from parameter file)"""
 
     main_bot.join_channel()
@@ -38,7 +38,7 @@ def test_send_message(caplog):
     main_bot.quit_channel()
 
 
-def test_bot_quit_channel(caplog):
+def test_quit_channel(caplog):
     """ testing quitting channel """
 
     main_bot.quit_channel()
