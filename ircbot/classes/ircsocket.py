@@ -16,5 +16,7 @@ class IRCSocket:
             self.irc_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.irc_socket.connect((self.irc_server, 6667))
             logging.debug("Connection to the server OK")
+            return True
         except Exception:
-            logging.error("Cannot connect to the server")
+            logging.error("Cannot connect to the server. Please verify the parameter file")
+            return False

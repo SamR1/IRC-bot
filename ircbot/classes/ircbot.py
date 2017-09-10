@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 import logging
 import random
+import re
+from pyowm import OWM
 
 
 class IRCBot:
@@ -15,6 +17,7 @@ class IRCBot:
         self._exitmsg = param['main_bot']['exitmsg']
         self._entermsg = param['main_bot']['entermsg']
         self._greetings = ["Hello", "Bonjour", "Hallo", "Buongiorno", "Hola", "Namaste"]
+        self._owmapi = param['owmapi']
 
     def _get_admin_name(self):
         """ Function to get admin name"""
@@ -31,7 +34,7 @@ class IRCBot:
     def join_channel(self):
         """ Joining Channel and eventually changing nickname if already used """
 
-        logging.debug("joining channel: " + self._channel)
+        logging.debug("Joining channel: " + self._channel)
 
         self._irc_socket.send(
             bytes("USER " + self._name + " " + self._name + " " + self._name + " " + self._name +
@@ -76,6 +79,49 @@ class IRCBot:
             target = self._channel
         self._irc_socket.send(bytes("PRIVMSG " + target + " :" + msg + "\n", "UTF-8"))
 
+    def get_info(self, message):
+        """ getting weather info for now """
+
+        pos = message.find("give me the weather at ")
+        if pos != -1:
+            pos += 23
+            city = message[pos:]
+            city = city.split(' ')[0] if city != '' else ''
+            if city != '':
+                self.get_weather_info(city)
+
+    def get_weather_info(self, city):
+        """ getting weather info from OpenWeatherMap from a city name """
+
+        try:
+            if self._owmapi is None or self._owmapi == '':
+                self.send_message("Sorry, I can't get the weather data. OpenWeatherMap API is "
+                                  "missing.")
+                return
+
+            owm = OWM(self._owmapi)
+            obs_list = owm.weather_at_places(city, searchtype='accurate')
+            nb = len(obs_list)
+            if nb == 0:
+                self.send_message("Sorry, no location found for '{}'".format(city))
+            else:
+                self.send_message("{} location(s) found".format(nb))
+                for obs in obs_list:
+
+                    l = obs.get_location()
+                    location = l.get_name()
+                    country = l.get_country()
+
+                    w = obs.get_weather()
+                    status = w.get_detailed_status()
+                    temp = w.get_temperature(unit='celsius')['temp']
+
+                    weather = "{} ({}): the current status is '{}' and the temperature is {}°C".format(
+                        location, country, status, temp)
+                    self.send_message(weather)
+        except:
+            self.send_message("Sorry, something wrong happened, I can't get the weather data.")
+
     def privmsg_actions(self, message, name):
         """ PRIVMSG actions """
 
@@ -85,20 +131,19 @@ class IRCBot:
             i = random.randint(0, 5)
             self.send_message(self._greetings[i] + " " + name + "!")
 
+        if message.find(self._name + " give me ") != -1:
+            self.get_info(message)
+
         # searching for a command ('.tell')
         if message[:5].find('.tell') != -1:
-
             target = message.split(' ', 1)[1]
-
             if target.find(' ') != -1:
                 message = target.split(' ', 1)[1]
                 target = target.split(' ')[0]
-
             else:
                 target = name
                 message = "Could not parse. The message should be in the format of " \
                           "‘.tell [target] [message]’ to work properly."
-
             self.send_message(message, target)
 
     def analyse_msg(self, irc_msg):

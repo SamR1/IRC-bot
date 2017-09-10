@@ -32,9 +32,10 @@ def main():
 
     logging.info("Connection to the socket")
     irc_socket = IRCSocket(param['main_bot']['irc_server'], param['main_bot']['irc_port'])
-    irc_socket.connect()
+    if not irc_socket.connect():
+        return
 
-    logging.debug("Main Bot init")
+    logging.info("Main Bot init")
     main_bot = IRCBot(irc_socket.irc_socket,
                       param)
     if not main_bot.join_channel():

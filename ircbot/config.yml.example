@@ -1,8 +1,9 @@
 main_bot:
-    irc_server:
-    channel:
-    bot_name:
-    admin_name:
-    entermsg:
-    exitcode:
-    exitmsg:
+  irc_server:
+  channel:
+  bot_name:
+  admin_name:
+  entermsg:
+  exitcode:
+  exitmsg:
+owmapi:
