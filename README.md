@@ -50,7 +50,7 @@ $ sudo pip install pyyaml pyowm
 | owmapi    |            | a valid key from OpenWeatherMap                  |
 
 * The current version of the IRC Bot can:
-    * say 'Hello' when you say Hi ou Hello to it
+    * say 'Hello' (in 6 languages, randomly) when you say 'Hi' or 'Hello' to it
     ```
     <SamR1> Hello MyPyBot
     <MyPyBot> Hola SamR1!
@@ -66,7 +66,7 @@ $ sudo pip install pyyaml pyowm
     <MyPyBot> London (US): the current status is 'sky is clear' and the temperature is 18.54°C
     <MyPyBot> London (US): the current status is 'sky is clear' and the temperature is 28.4°C
      ```
-To stop the script, just enter the exitcode with the Bot name:
+* To stop the script, just enter the exitcode with the Bot name:
 ```
 <SamR1> Bye MyPyBot
 <MyPyBot> Why me... ? Snif... OK, I'm leaving :'(
