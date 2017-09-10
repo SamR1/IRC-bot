@@ -1,7 +1,7 @@
 import yaml
 
-def loading_param():
-    with open('../../ircbot/config.yml', 'r') as stream:
+def loading_param(filename):
+    with open(filename, 'r') as stream:
         try:
             PARAM = yaml.safe_load(stream)
         except yaml.YAMLError as error:

@@ -3,5 +3,7 @@ main_bot:
     channel:
     bot_name:
     admin_name:
+    entermsg:
     exitcode:
     exitmsg:
+admin_pwd:

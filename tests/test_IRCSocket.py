@@ -2,7 +2,7 @@ import loadparam
 from ircbot.classes import ircsocket
 
 
-param = loadparam.loading_param()
+param = loadparam.loading_param('../../ircbot/config.yml')
 
 
 def test_connexion(caplog):
