@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import logging
+import random
 
 
 class IRCBot:
@@ -13,6 +14,7 @@ class IRCBot:
         self._exitcode = param['main_bot']['exitcode'] + self._name
         self._exitmsg = param['main_bot']['exitmsg']
         self._entermsg = param['main_bot']['entermsg']
+        self._greetings = ["Hello", "Bonjour", "Hallo", "Buongiorno", "Hola", "Namaste"]
 
     def _get_admin_name(self):
         """ Function to get admin name"""
@@ -59,8 +61,10 @@ class IRCBot:
         """ PRIVMSG actions """
 
         # greetings
-        if message.find('Hi ' + self._name) != -1:
-            self.send_message("Hello " + name + "!")
+        if message.find('Hi ' + self._name) != -1 or \
+           message.find('Hello ' + self._name) != -1:
+            i = random.randint(0, 5)
+            self.send_message(self._greetings[i] + " " + name + "!")
 
         # searching for a command ('.tell')
         if message[:5].find('.tell') != -1:
