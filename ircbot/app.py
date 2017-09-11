@@ -77,8 +77,10 @@ def main():
     logging.info("Main Bot init")
     # only one bot for now
     irc_bot_param = session.query(dbclass.Ircbot).first()
+    greetings = session.query(dbclass.Greetings).all()
+    print(greetings)
     main_bot = IRCBot(irc_socket.irc_socket,
-                      irc_bot_param)
+                      irc_bot_param, greetings)
     if not main_bot.join_channel():
         return
 

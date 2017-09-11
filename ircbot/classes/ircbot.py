@@ -7,7 +7,7 @@ from pyowm import OWM
 class IRCBot:
     """ IRC Bot """
 
-    def __init__(self, irc_socket, irc_bot_param):
+    def __init__(self, irc_socket, irc_bot_param, greetings):
         self._irc_socket = irc_socket
         self._channel = irc_bot_param.channel
         self._admin_name = irc_bot_param.admin_name
@@ -15,7 +15,7 @@ class IRCBot:
         self._exitcode = irc_bot_param.exitcode
         self._exitmsg = irc_bot_param.exitmsg
         self._entermsg = irc_bot_param.entermsg
-        #self._greetings = ["Hello", "Bonjour", "Hallo", "Buongiorno", "Hola", "Namaste"]
+        self._greetings = greetings
         self._owmapi = irc_bot_param.owmapi
 
     def _get_admin_name(self):
@@ -128,8 +128,9 @@ class IRCBot:
         # greetings
         if message.find('Hi ' + self._name) != -1 or \
            message.find('Hello ' + self._name) != -1:
+
             i = random.randint(0, 5)
-            self.send_message(self._greetings[i] + " " + name + "!")
+            self.send_message(self._greetings[i].greeting + " " + name + "!")
 
         if message.find(self._name + " give me ") != -1:
             self.get_info(message)
