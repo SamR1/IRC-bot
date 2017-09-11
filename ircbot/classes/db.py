@@ -62,7 +62,7 @@ def load_db(engine, param):
         new_bot = Ircbot(bot_name=param['main_bot']['bot_name'],
                          admin_name=param['main_bot']['admin_name'],
                          channel=param['main_bot']['channel'],
-                         exitcode=param['main_bot']['exitcode'] + param['main_bot']['admin_name'],
+                         exitcode=param['main_bot']['exitcode'] + param['main_bot']['bot_name'],
                          exitmsg=param['main_bot']['exitmsg'],
                          entermsg=param['main_bot']['entermsg'],
                          owmapi = param['owmapi'])
