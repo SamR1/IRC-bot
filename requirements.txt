@@ -1,4 +1,5 @@
 sqlalchemy
+sqlalchemy_utils
 appdirs
 packaging
 six

@@ -126,14 +126,12 @@ class IRCBot:
             self.send_message("Sorry, something wrong happened, I can't get the weather data.")
 
     def update_greetings(self, greeting):
+        """ Adding new greeting, if not already exists """
+
         try:
-            print("a")
             Base.metadata.bind = self._engine
-            print("b")
             DBSession = sessionmaker()
-            print("c")
             DBSession.bind = self._engine
-            print("d")
             session = DBSession()
 
             greeting_already_exists = session.query(Greetings)\
@@ -198,6 +196,8 @@ class IRCBot:
             self.send_message(message, target)
 
     def analyse_msg(self, irc_msg):
+        """ Analyze message in order to trigger the associated action """
+
         # check if the message is a private message
         if irc_msg.find("PRIVMSG") != -1:
             logging.debug("PRIVMSG")

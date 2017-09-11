@@ -12,6 +12,7 @@ a simple IRC bot in Python (realized during the [CodingAcademy](http://www.codin
     - Python 3 (tested with 3.6)
     - [PyYAML](http://pyyaml.org)
     - [PyOWM](https://github.com/csparpa/pyowm) and a valid API key from [OpenWeatherMap](https://home.openweathermap.org/users/sign_up)
+    - [SQLAlqchemy](https://www.sqlalchemy.org/) and [SqlAlchemy_utils](https://sqlalchemy-utils.readthedocs.io/en/latest/)
 * For [unit tests](tests/README.md)
     - [pytest](https://docs.pytest.org/en/latest/)
     - [pytest-catchlog](https://pypi.python.org/pypi/pytest-catchlog)
@@ -55,6 +56,17 @@ $ sudo pip install pyyaml pyowm
     <SamR1> Hello MyPyBot
     <MyPyBot> Hola SamR1!
     ```
+    You can add new greetings with the following command:
+    ```bash
+    <SamR1> Hello MyPyBot
+    <MyPyBot> Hola SamR1!
+    <SamR1> MyPyBot add greeting "Ahoy"
+    <MyPyBot> New greeting added, you can it now.
+    <SamR1> Hello MyPyBot
+    <MyPyBot> Hola SamR1!
+    <SamR1> Hello MyPyBot
+    <MyPyBot> Ahyo SamR1!
+    ```
     * send private message with `.tell [target] [message]` command
     * get the weather (with the command: `[bot_name] give me the weather for ` ) 
      ```
@@ -83,6 +95,31 @@ To build an executable, use [cx_Freeze](https://github.com/anthony-tuininga/cx_F
 [sam@sam-pc ircbot]$ python setup.py build
 ```
 Don't forget to update the configuration file.
+
+Warning: since the use of SQL Alchemy, an error occurs:
+```bash
+[sam@sam-pc exe.linux-x86_64-3.6]$ ./IRCBot 
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/site-packages/cx_Freeze/initscripts/__startup__.py", line 14, in run
+    module.run()
+  File "/usr/lib/python3.6/site-packages/cx_Freeze/initscripts/Console.py", line 26, in run
+    exec(code, m.__dict__)
+  File "app.py", line 5, in <module>
+  File "/usr/lib/python3.6/site-packages/sqlalchemy_utils/__init__.py", line 49, in <module>
+    from .i18n import TranslationHybrid  # noqa
+  File "/usr/lib/python3.6/site-packages/sqlalchemy_utils/i18n.py", line 10, in <module>
+    import babel
+  File "/usr/lib/python3.6/site-packages/babel/__init__.py", line 20, in <module>
+    from babel.core import UnknownLocaleError, Locale, default_locale, \
+  File "/usr/lib/python3.6/site-packages/babel/core.py", line 14, in <module>
+    from babel import localedata
+  File "/usr/lib/python3.6/site-packages/babel/localedata.py", line 35, in <module>
+    _dirname = os.path.join(get_base_dir(), 'locale-data')
+  File "/usr/lib/python3.6/site-packages/babel/localedata.py", line 27, in get_base_dir
+    basedir = sys._MEIPASS
+AttributeError: module 'sys' has no attribute '_MEIPASS'
+```
+see issue
 
 ## Sources
 * https://linuxacademy.com/blog/geek/creating-an-irc-bot-with-python3/
