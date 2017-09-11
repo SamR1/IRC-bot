@@ -2,12 +2,14 @@
 import logging
 import random
 from pyowm import OWM
+from .db import Base, Greetings
+from sqlalchemy.orm import sessionmaker
 
 
 class IRCBot:
     """ IRC Bot """
 
-    def __init__(self, irc_socket, irc_bot_param, greetings):
+    def __init__(self, irc_socket, irc_bot_param, greetings, engine):
         self._irc_socket = irc_socket
         self._channel = irc_bot_param.channel
         self._admin_name = irc_bot_param.admin_name
@@ -16,6 +18,7 @@ class IRCBot:
         self._exitmsg = irc_bot_param.exitmsg
         self._entermsg = irc_bot_param.entermsg
         self._greetings = greetings
+        self._engine = engine
         self._owmapi = irc_bot_param.owmapi
 
     def _get_admin_name(self):
@@ -122,18 +125,65 @@ class IRCBot:
             logging.error(str(e.args))
             self.send_message("Sorry, something wrong happened, I can't get the weather data.")
 
+    def update_greetings(self, greeting):
+        try:
+            print("a")
+            Base.metadata.bind = self._engine
+            print("b")
+            DBSession = sessionmaker()
+            print("c")
+            DBSession.bind = self._engine
+            print("d")
+            session = DBSession()
+
+            greeting_already_exists = session.query(Greetings)\
+                                        .filter(Greetings.greeting == greeting).first()
+            if not greeting_already_exists:
+                new_greeting = Greetings(greeting=greeting)
+                session.add(new_greeting)
+                session.commit()
+                greeting_added = session.query(Greetings) \
+                    .filter(Greetings.greeting == greeting).first()
+                self._greetings.append(greeting_added)
+                self.send_message("New greeting added, you can it now.")
+            else:
+                self.send_message("This greeting already exists, try another one.")
+
+        except Exception as e:
+            logging.error(str(e.args))
+            self.send_message("Sorry something wrong happened, can you retry.")
+            return False
+
+    def add_greetings(self, message):
+
+        pos = message.find("add greeting ")
+        if pos != -1:
+            pos += 13
+            greeting = message[pos:]
+            greeting = greeting.split('"')[1] if greeting != '' else ''
+            if greeting != '':
+                self.update_greetings(greeting)
+            else:
+                self.send_message("Sorry I don't understand. Can you rephrase the new greeting?")
+
     def privmsg_actions(self, message, name):
         """ PRIVMSG actions """
 
         # greetings
         if message.find('Hi ' + self._name) != -1 or \
            message.find('Hello ' + self._name) != -1:
-
-            i = random.randint(0, 5)
+            greeting_nb = len(self._greetings) - 1
+            i = random.randint(0, greeting_nb)
             self.send_message(self._greetings[i].greeting + " " + name + "!")
 
         if message.find(self._name + " give me ") != -1:
             self.get_info(message)
+
+        if message.find(self._name + " add greeting ") != -1:
+            if name.lower() == self._admin_name.lower():
+                self.add_greetings(message)
+            else:
+                self.send_message("You must be an admin to add a new greeting.")
 
         # searching for a command ('.tell')
         if message[:5].find('.tell') != -1:
