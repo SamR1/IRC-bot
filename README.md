@@ -65,7 +65,7 @@ $ sudo pip install pyyaml pyowm
     <SamR1> Hello MyPyBot
     <MyPyBot> Hola SamR1!
     <SamR1> Hello MyPyBot
-    <MyPyBot> Ahyo SamR1!
+    <MyPyBot> Ahoy SamR1!
     ```
     * send private message with `.tell [target] [message]` command
     * get the weather (with the command: `[bot_name] give me the weather for ` ) 
@@ -119,7 +119,7 @@ Traceback (most recent call last):
     basedir = sys._MEIPASS
 AttributeError: module 'sys' has no attribute '_MEIPASS'
 ```
-see issue
+see issue [Issue #2](https://github.com/SamR1/IRC-bot/issues/2)
 
 ## Sources
 * https://linuxacademy.com/blog/geek/creating-an-irc-bot-with-python3/
