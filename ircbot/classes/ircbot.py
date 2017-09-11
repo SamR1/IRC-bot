@@ -7,16 +7,16 @@ from pyowm import OWM
 class IRCBot:
     """ IRC Bot """
 
-    def __init__(self, irc_socket, param):
+    def __init__(self, irc_socket, irc_bot_param):
         self._irc_socket = irc_socket
-        self._channel = param['main_bot']['channel']
-        self._admin_name = param['main_bot']['admin_name']
-        self._name = param['main_bot']['bot_name']
-        self._exitcode = param['main_bot']['exitcode'] + self._name
-        self._exitmsg = param['main_bot']['exitmsg']
-        self._entermsg = param['main_bot']['entermsg']
-        self._greetings = ["Hello", "Bonjour", "Hallo", "Buongiorno", "Hola", "Namaste"]
-        self._owmapi = param['owmapi']
+        self._channel = irc_bot_param.channel
+        self._admin_name = irc_bot_param.admin_name
+        self._name = irc_bot_param.bot_name
+        self._exitcode = irc_bot_param.exitcode
+        self._exitmsg = irc_bot_param.exitmsg
+        self._entermsg = irc_bot_param.entermsg
+        #self._greetings = ["Hello", "Bonjour", "Hallo", "Buongiorno", "Hola", "Namaste"]
+        self._owmapi = irc_bot_param.owmapi
 
     def _get_admin_name(self):
         """ Function to get admin name"""

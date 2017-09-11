@@ -17,3 +17,4 @@ sonar-project.properties
 ## App
 config.yml
 *.log
+/ircbot/db/ircbot.db
