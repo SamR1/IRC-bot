@@ -96,30 +96,7 @@ To build an executable, use [cx_Freeze](https://github.com/anthony-tuininga/cx_F
 ```
 Don't forget to update the configuration file.
 
-Warning: since the use of SQL Alchemy, an error occurs:
-```bash
-[sam@sam-pc exe.linux-x86_64-3.6]$ ./IRCBot 
-Traceback (most recent call last):
-  File "/usr/lib/python3.6/site-packages/cx_Freeze/initscripts/__startup__.py", line 14, in run
-    module.run()
-  File "/usr/lib/python3.6/site-packages/cx_Freeze/initscripts/Console.py", line 26, in run
-    exec(code, m.__dict__)
-  File "app.py", line 5, in <module>
-  File "/usr/lib/python3.6/site-packages/sqlalchemy_utils/__init__.py", line 49, in <module>
-    from .i18n import TranslationHybrid  # noqa
-  File "/usr/lib/python3.6/site-packages/sqlalchemy_utils/i18n.py", line 10, in <module>
-    import babel
-  File "/usr/lib/python3.6/site-packages/babel/__init__.py", line 20, in <module>
-    from babel.core import UnknownLocaleError, Locale, default_locale, \
-  File "/usr/lib/python3.6/site-packages/babel/core.py", line 14, in <module>
-    from babel import localedata
-  File "/usr/lib/python3.6/site-packages/babel/localedata.py", line 35, in <module>
-    _dirname = os.path.join(get_base_dir(), 'locale-data')
-  File "/usr/lib/python3.6/site-packages/babel/localedata.py", line 27, in get_base_dir
-    basedir = sys._MEIPASS
-AttributeError: module 'sys' has no attribute '_MEIPASS'
-```
-see issue [Issue #2](https://github.com/SamR1/IRC-bot/issues/2)
+Warning: since the use of SQL Alchemy, an error occurs, see issue [Issue #2](https://github.com/SamR1/IRC-bot/issues/2)
 
 ## Sources
 * https://linuxacademy.com/blog/geek/creating-an-irc-bot-with-python3/
